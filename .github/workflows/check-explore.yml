@@ -1,0 +1,48 @@
+name: Check Microsoft Explore Program status
+
+on:
+  schedule:
+    # 13:00 UTC = 9:00am ET (adjust to taste; GitHub cron is always UTC)
+    - cron: "0 13 * * *"
+  workflow_dispatch: {}   # lets you trigger a manual check from the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run checker
+        id: check
+        run: python check_explore.py
+
+      - name: Commit updated state
+        run: |
+          git config user.name "explore-ms-watcher-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add state.json
+          git diff --cached --quiet || git commit -m "Update state [skip ci]"
+          git push
+
+      - name: Email me if applications just opened
+        if: steps.check.outputs.should_notify == 'true'
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "Microsoft Explore Program applications may be open!"
+          to: ${{ secrets.MAIL_TO }}
+          from: Explore MS Watcher
+          body: ${{ steps.check.outputs.summary }}
