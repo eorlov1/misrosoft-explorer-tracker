@@ -10,9 +10,10 @@ August.
 
 ## How it works
 
-- `check_explore.py` fetches the page, looks at the "Explore Program
-  internships" section, and checks the job titles there against patterns
-  like "Explore Microsoft ... First-Year" / "Second-Year".
+- `check_explore.ts` (TypeScript, run via [tsx](https://github.com/privatenumber/tsx)
+  on Node) fetches the page, looks at the "Explore Program internships"
+  section, and checks the job titles there against patterns like
+  "Explore Microsoft ... First-Year" / "Second-Year".
 - `state.json` tracks whether it was open last time it checked.
 - The GitHub Actions workflow (`.github/workflows/check-explore.yml`) runs
   the script daily and emails you **only when the status flips from closed
@@ -24,7 +25,8 @@ August.
 ## Setup (~5 minutes)
 
 1. **Create a new GitHub repo** and push these files to it (public or
-   private both work).
+   private both work). Requires Node.js 20+ if you want to run it locally
+   (`npm install` then `npm start`).
 
 2. **Get an email app password.** Gmail is the easiest to wire up:
    - Turn on 2-Step Verification on your Google account if it isn't already.

@@ -1,0 +1,18 @@
+{
+  "name": "explore-ms-watcher",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Checks the Microsoft Explore Program page daily and emails you when applications open.",
+  "type": "module",
+  "scripts": {
+    "start": "tsx check_explore.ts"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}
